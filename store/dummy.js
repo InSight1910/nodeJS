@@ -28,17 +28,15 @@ const db = {
 	],
 };
 
-const list = (table) => db[table];
-const get = (table, id) => {
-	const collection = list(table);
-	return collection.filter((item) => item.id === id)[0] || null;
-};
-const upsert = (table, data) => {};
-const remove = (table, id) => true;
+async function list(table) {
+	return db[table];
+}
+async function get(table, id) {
+	const collection = await list(table);
+	return collection.filter((item) => item.id == id) || null;
+}
 
 module.exports = {
 	list,
 	get,
-	upsert,
-	remove,
 };

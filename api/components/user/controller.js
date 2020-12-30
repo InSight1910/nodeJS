@@ -1,9 +1,32 @@
-const store = require("../../../store/dummy");
-
+const nanoid = require("nanoid");
 const TABLE = "user";
 
-function list() {
-	return store.list(TABLE);
-}
+module.exports = function (injectedStore) {
+	if (!injectedStore) {
+		injectedStore = require("../../../store/dummy");
+	}
 
-module.exports = { list };
+	function list() {
+		return injectedStore.list(TABLE);
+	}
+
+	function getUser(id) {
+		return injectedStore.get(TABLE, id);
+	}
+	function upsert(body) {
+		const user = {
+			name: body.name,
+		};
+		if (body.id) {
+			user.id = body.id;
+		} else {
+			user.id = nanoid();
+		}
+		return injectedStore.upsert(TABLE, user);
+	}
+	return {
+		list,
+		getUser,
+		upsert,
+	};
+};
