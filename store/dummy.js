@@ -35,8 +35,23 @@ async function get(table, id) {
 	const collection = await list(table);
 	return collection.filter((item) => item.id == id) || null;
 }
+async function upsert(table, data) {
+	if (!db[table]) {
+		db[table] = [];
+	}
+	db[table].push(data);
+}
+async function query(table, q) {
+	let col = await list(table);
+	let key = Object.keys(q)[0];
+	if (col) {
+		return col.filter((user) => user[key] === q[key])[0];
+	}
+}
 
 module.exports = {
 	list,
 	get,
+	upsert,
+	query,
 };

@@ -1,15 +1,16 @@
 const express = require("express");
 
 const response = require("../../../network/response");
-const { getUser } = require("./index");
+
 const ctrl = require("./index");
 
 const router = express.Router();
 
-// Routing
+// Routes
 
 router.get("/", list);
-router.get("/:id", getUser);
+router.get("/:id", getUserId);
+router.post("/", createUser);
 
 // internal functions
 function list() {
@@ -21,10 +22,18 @@ function list() {
 			response.error(req, res, err.message, res.statusCode);
 		});
 }
-function getUser() {
+function getUserId() {
 	ctrl.getUser(req.params.id)
 		.then((user) => {
-			console.log(req.params.id);
+			response.success(req, res, user, res.statusCode);
+		})
+		.catch((err) => {
+			response.error(req, res, err, res.statusCode);
+		});
+}
+function createUser(req, res) {
+	ctrl.upsert(req.body)
+		.then((user) => {
 			response.success(req, res, user, res.statusCode);
 		})
 		.catch((err) => {
