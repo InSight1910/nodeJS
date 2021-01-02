@@ -12,9 +12,9 @@ router.post("/login", login);
 
 // Internal functions
 
-function login(req, res) {
+function login(req, res, next) {
 	ctrl.login(req.body.username, req.body.password)
 		.then((token) => response.success(req, res, token, res.statusCode))
-		.catch((err) => response.error(req, res, err, res.statusCode));
+		.catch(next);
 }
 module.exports = router;
