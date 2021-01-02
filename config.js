@@ -5,4 +5,7 @@ module.exports = {
 	jwt: {
 		secret: process.env.JWT_SECRET || "secret",
 	},
+	db: {
+		password: process.env.PASSWORD || "Amanda1910",
+	},
 };
